@@ -1,5 +1,6 @@
 # IMPORTACION DE MODULOS
 from modules.menus import main_menu
+from modules.error_messages import good_bye
 
 # DICCIONARIOS A USAR
 cuentas = {} # Diccionario para guardar las cuentas
@@ -56,8 +57,8 @@ while True: # Bucle controlado
         case 1: # Caso 1 Creacion de la cuenta
             crear_cuenta()
             print(f'\n+ CUENTA CREADA CON EXITO +\n. + Numero de cuenta: {1000} +\n+ Nombre Guardado: {cuentas[1000]['NOMBRE']} +\n+ Documento: {cuentas[1000]['DOCUMENTO']} +\n')
-        case 2:
-            print('Adios')
+        case 7:
+            good_bye()
             break
         case _:
             print('OPCION NO IMPLEMENTADA. LO SIENTO')
