@@ -1,6 +1,6 @@
-from modules.error_messages import invalid_option, out_of_range
+from modules.error_messages import opcion_invalida, fuera_de_rango
 
-def main_menu():
+def menu_principal():
     print('''
 ++++++++++++++++++++++++++++++++++++++++++++
 +           A C M E  B A N K               +
@@ -15,11 +15,26 @@ def main_menu():
 ++++++++++++++++++++++++++++++++++++++++++++
 ''')
     while True:
-        opcion = input('Ingrese una opcion')
+        opcion = input('Ingrese una opcion > ')
         if not opcion.isdigit():
-            invalid_option()
-            return main_menu()
+            opcion_invalida()
+            return menu_principal()
         elif int(opcion) > 7 or int(opcion) <= 0:
-            out_of_range()
-            return main_menu()
+            fuera_de_rango()
+            return menu_principal()
         return int(opcion)
+    
+def sub_menu_servicios():
+        print("===============")
+        print("===Servicios===")
+        print("===============")
+        print(" ")
+        print("1. Energia")
+        print("2. Gas")
+        print("3. Agua")
+        print('0. Salir')
+        print('')
+        opcion = int(input("¿Que desea hacer?: "))
+        while opcion < 0 or opcion > 3: #Validar que la opcion esté entre 1 y 3
+            opcion == int(input("Opcion invalida, eliga nuevamente"))
+        return opcion
