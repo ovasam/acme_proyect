@@ -1,12 +1,18 @@
 # IMPORTACION DE MODULOS
-from modules.menus import main_menu
-from modules.error_messages import good_bye
+import os
+from modules.menus import menu_principal
+from modules.error_messages import adios, no_opcion
+import modules.transactions as t # Siempre al usar una trasaccion usamos t.(transaccion) <- si retiramos seria: t.retirar_dinero
+
+# FUNCION LIMPIAR PANTALLA
+def cls():
+    os.system('cls' if os.name=='nt' else 'clear')
 
 # DICCIONARIOS A USAR
 cuentas = {} # Diccionario para guardar las cuentas
 
 # VARIABLES A USAR
-n_cuenta = 1000
+n_cuenta = 1
 
 # 1. Funcion: Crear Una Cuenta Bancaria
 def crear_cuenta():
@@ -16,33 +22,23 @@ def crear_cuenta():
     
     #Datos del usuario
     
-    cc = int(input("Ingrese numero de documento: "))
-    name = input("Ingrese su nombre: ")
-    password = int(input("Ingrese su clave para la cuenta: "))
+    documento = int(input("Ingrese numero de documento: "))
+    nombre = input("Ingrese su nombre: ")
+    clave = int(input("Ingrese su clave para la cuenta: "))
     
     cuentas[n_cuenta] = {
-        'DOCUMENTO': cc,
-        'NOMBRE': name,
-        'CONTRASEÑA': password
+        'DOCUMENTO': documento,
+        'NOMBRE': nombre,
+        'CONTRASEÑA': clave,
+        'BILLETERA': 5000
     }
+    cls()
+    print(f'\n+ CUENTA CREADA CON EXITO +\n. + Numero de cuenta: {n_cuenta} +\n+ Nombre Guardado: {cuentas[n_cuenta]['NOMBRE']} +\n+ Documento: {cuentas[n_cuenta]['DOCUMENTO']} +\n')
+    print(f'Saldo en cuenta no. {n_cuenta}: {cuentas[n_cuenta]['BILLETERA']}')
     n_cuenta += 1
-    print(cuentas)
+    
 
 # 4. Funcion: Pagar servicios    
-
-def pagar_servicios():
-    def menu2():
-        print("===============")
-        print("===Servicios===")
-        print("===============")
-        print(" ")
-        print("1. Energia")
-        print("2. Luz")
-        print("3. Agua")
-        opcion = int(input("¿Que desea hacer?: "))
-        while opcion < 1 or opcion > 3: #Validar que la opcion esté entre 1 y 3
-            opcion == int(input("Opcion invalida, eliga nuevamente"))
-        return opcion
 
 # 5. Funcion: Mostrar Movimientos Bancarios    
 def movimientos_bancarios():
@@ -51,18 +47,21 @@ def movimientos_bancarios():
 
 # MAIN ALGORITM # ALGORITMO PRINCIPAL #
 while True: # Bucle controlado
-    opcion = main_menu() # Inicializa el menu y guarda la opcion retornada en la variable #opcion#
+    opcion = menu_principal() # Inicializa el menu y guarda la opcion retornada en la variable #opcion#
 
     match opcion: # Sistema de casos para ahorrar condiciones anidadas
         case 1: # Caso 1 Creacion de la cuenta
             crear_cuenta()
-            print(f'\n+ CUENTA CREADA CON EXITO +\n. + Numero de cuenta: {1000} +\n+ Nombre Guardado: {cuentas[1000]['NOMBRE']} +\n+ Documento: {cuentas[1000]['DOCUMENTO']} +\n')
+        case 4:
+                cuenta = int(input('Ingrese el numero de cuenta >'))
+                monto = input('Ingrese el monto que quiere retirar')
+                t.retirar_dinero(cuenta, monto, cuentas)
         case 7:
-            good_bye()
+            adios()
             break
         case _:
-            print('OPCION NO IMPLEMENTADA. LO SIENTO')
-
+            cls()
+            no_opcion()
 
 # Modulos:
 # Modulo gestion_billetera: Lo usaremos para manejar los retiros y las consignaciones en cada cuenta.
