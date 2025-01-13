@@ -26,9 +26,6 @@ def retirar_dinero(n_cuenta, monto, cuentas):
     #cuentas (dict): Diccionario con las cuentas y sus datos.
 
     #Verificar si la cuenta existe en el diccionario
-    
-
-   
 
 
 def pagar_servicios2(id_cuenta, monto, servicio):
