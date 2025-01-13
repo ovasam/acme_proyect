@@ -1,7 +1,10 @@
 # IMPORTACION DE MODULOS
-import os
-from modules.menus import menu_principal
-from modules.error_messages import adios, no_opcion
+import os # Importacion modulo sistema operativo para limpiar consola
+
+from modules.menus import menu_principal # Importamos el menu principal de nuestro modulo en: modules/menus.py
+from modules.error_messages import adios, no_opcion # Importamos mensaje de despedida y de opcion en tramite de nuestro modulo en: modules/error_messages.py
+
+# Modulo 01 <- Transacciones (retirar, consignar)
 import modules.transactions as t # Siempre al usar una trasaccion usamos t.(transaccion) <- si retiramos seria: t.retirar_dinero
 
 # FUNCION LIMPIAR PANTALLA

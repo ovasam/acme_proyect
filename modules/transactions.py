@@ -1,6 +1,6 @@
 # IMPORTACION DE MODULOS
 import os
-from modules.error_messages import clave_incorrecta
+from modules.error_messages import clave_incorrecta, monto_invalido, saldo_insuficiente, retiro_realizado, cuenta_inexistente
 
 # funcion limpiar pantalla
 def cls():
@@ -23,35 +23,17 @@ def retirar_dinero(n_cuenta, monto, cuentas):
             # Verificar si hay suficiente saldo para realizar el retiro
             if int(monto) <= 0:
                 cls()
-                print("""
-+++++++++++++++++++++++++++++++++++++++++++++++++
-+ Por favor indique un monto valido (mayor a 0) +
-+++++++++++++++++++++++++++++++++++++++++++++++++        
-                      """)
+                monto_invalido() # Mensaje de error 'Monto mayor a 0'
             elif int(monto) > saldo:
                 cls()
-                print("""
-+++++++++++++++++++++++++++++++++++++++++++++++++
-+ No dispones del saldo suficiente en tu cuenta +
-+         Intenta con un monto menor            +
-+++++++++++++++++++++++++++++++++++++++++++++++++        
-                      """)
+                saldo_insuficiente() # Mensaje de error 'Monto insuficiente'
             else:
                 cuentas[n_cuenta]['BILLETERA'] -= int(monto)  # Restar el monto del saldo
                 cls()
-                print(f'''
-+++++++++++++++++++++++++++++++
-+      RETIRO COMPLETADO      +
-+ Saldo > {cuentas[n_cuenta]['BILLETERA']}                +
-++++++++++++++++++++++++++++++++
-                      ''')
+                retiro_realizado(cuentas, n_cuenta) # Mensaje de exito, 'Retiro Realizado.'
         else:
             cls()
             clave_incorrecta()
     else:
         cls()
-        print("""
-+++++++++++++++++++++++++++++++++
-+  Error: La cuenta no existe.  +
-+++++++++++++++++++++++++++++++++
-              """)
+        cuenta_inexistente() # Mensaje de error 'Cuenta no encontrada'
