@@ -15,7 +15,6 @@ def retirar_dinero(n_cuenta, monto, cuentas):
     #cuentas (dict): Diccionario con las cuentas y sus datos.
 
     #Verificar si la cuenta existe en el diccionario de cuentas
-        
     if n_cuenta in cuentas:
         password = input("Ingrese su clave: ")
         if int(password) == cuentas[n_cuenta]['CONTRASEÑA']:
@@ -37,3 +36,41 @@ def retirar_dinero(n_cuenta, monto, cuentas):
     else:
         cls()
         cuenta_inexistente() # Mensaje de error 'Cuenta no encontrada'
+
+# Función para pagar servicios
+def pagar_servicio(n_cuenta, cuentas):
+
+    #Parámetros:
+        #n_cuenta (int): Número de la cuenta desde la cual se quiere pagar.
+        #cuentas (dict): Diccionario que contiene las cuentas y sus datos.
+
+    # Verificar si la cuenta existe
+    if n_cuenta in cuentas:
+        # Solicitar clave del usuario
+        password = input("Ingrese su clave: ")
+        if password == str(cuentas[n_cuenta]['CONTRASEÑA']):
+            saldo_actual = cuentas[n_cuenta]['BILLETERA']
+
+            # Seleccionar servicio
+            servicio_seleccionado = input("Ingrese el nombre del servicio que desea pagar: ")
+            if servicio_seleccionado in SERVICIOS:
+                monto = SERVICIOS[servicio_seleccionado]
+
+                # Validar si hay saldo suficiente
+                if monto > saldo_actual:
+                    cls()
+                    saldo_insuficiente()  # Saldo insuficiente
+                else:
+                    # Descontar el saldo
+                    cuentas[n_cuenta]['BILLETERA'] -= monto
+                    cls()
+                    pago_realizado(servicio_seleccionado, monto, cuentas, n_cuenta)  # Mensaje de éxito
+            else:
+                cls()
+                print("Error: Servicio no encontrado.")
+        else:
+            cls()
+            clave_incorrecta()  # Clave incorrecta
+    else:
+        cls()
+        cuenta_inexistente()  # Cuenta inexistente
