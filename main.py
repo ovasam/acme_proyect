@@ -22,9 +22,7 @@ def crear_cuenta():
     
     global cuentas
     global n_cuenta
-    
-    #Datos del usuario
-    
+        
     documento = int(input("Ingrese numero de documento: "))
     nombre = input("Ingrese su nombre: ")
     clave = int(input("Ingrese su clave para la cuenta: "))
@@ -35,26 +33,32 @@ def crear_cuenta():
         'CONTRASEÑA': clave,
         'BILLETERA': 5000
     }
-    cls()
+    cls() # Limpia pantalla
     print(f'\n+ CUENTA CREADA CON EXITO +\n. + Numero de cuenta: {n_cuenta} +\n+ Nombre Guardado: {cuentas[n_cuenta]['NOMBRE']} +\n+ Documento: {cuentas[n_cuenta]['DOCUMENTO']} +\n')
-    print(f'Saldo en cuenta no. {n_cuenta}: {cuentas[n_cuenta]['BILLETERA']}')
     n_cuenta += 1
-    
 
-# 4. Funcion: Pagar servicios    
-
-# 5. Funcion: Mostrar Movimientos Bancarios    
-def movimientos_bancarios():
-    print()
-
+def info_cuenta():
+    n_cuenta = input('Ingrese el numero de su cuenta')
+    if n_cuenta not in cuentas:
+        conf = input('Cuenta no encontrada, Desea buscar su cuenta?')
+        if conf.lower().strip() == 's':
+            print('Buscando cuenta..')
+            #buscar()
+        print(f'- Informacion Encontrada -')
+        print("   {cuentas[n_cuenta]['DOCUMENTO']} ")
+        print(f"   {cuentas[n_cuenta]['NOMBRE']}   ")
+        print(f"           {cuentas[n_cuenta]['BILLETERA']}")
 
 # MAIN ALGORITM # ALGORITMO PRINCIPAL #
+
 while True: # Bucle controlado
     opcion = menu_principal() # Inicializa el menu y guarda la opcion retornada en la variable #opcion#
 
     match opcion: # Sistema de casos para ahorrar condiciones anidadas
         case 1: # Caso 1 Creacion de la cuenta
             crear_cuenta()
+        case 2:
+            info_cuenta()
         case 4:
                 cuenta = int(input('Ingrese el numero de cuenta >'))
                 monto = input('Ingrese el monto que quiere retirar')
