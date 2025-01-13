@@ -2,7 +2,7 @@
 import os # Importacion modulo sistema operativo para limpiar consola
 
 from modules.menus import menu_principal # Importamos el menu principal de nuestro modulo en: modules/menus.py
-from modules.error_messages import adios, no_opcion # Importamos mensaje de despedida y de opcion en tramite de nuestro modulo en: modules/error_messages.py
+from modules.error_messages import adios, no_opcion, cuenta_inexistente # Importamos mensaje de despedida y de opcion en tramite de nuestro modulo en: modules/error_messages.py
 
 # Modulo 01 <- Transacciones (retirar, consignar)
 import modules.transactions as t # Siempre al usar una trasaccion usamos t.(transaccion) <- si retiramos seria: t.retirar_dinero
@@ -34,21 +34,22 @@ def crear_cuenta():
         'BILLETERA': 5000
     }
     cls() # Limpia pantalla
-    print(f'\n+ CUENTA CREADA CON EXITO +\n. + Numero de cuenta: {n_cuenta} +\n+ Nombre Guardado: {cuentas[n_cuenta]['NOMBRE']} +\n+ Documento: {cuentas[n_cuenta]['DOCUMENTO']} +\n')
+    print(f"\n+ CUENTA CREADA CON EXITO +\n. + Numero de cuenta: {n_cuenta} +\n+ Nombre Guardado: {cuentas[n_cuenta]['NOMBRE']} +\n+ Documento: {cuentas[n_cuenta]['DOCUMENTO']} +\n")
     n_cuenta += 1
 
 def info_cuenta():
-    n_cuenta = int(input('Ingrese el numero de su cuenta'))
-    if n_cuenta not in cuentas:
-        conf = input('Cuenta no encontrada, Desea buscar su cuenta?')
-        if conf.lower().strip() == 's':
-            print('Buscando cuenta..')
-            #buscar()
-        print(f'- Informacion Encontrada -')
-        print("   {cuentas[n_cuenta]['DOCUMENTO']} ")
-        print(f"   {cuentas[n_cuenta]['NOMBRE']}   ")
-        print(f"           {cuentas[n_cuenta]['BILLETERA']}")
-
+        while True:
+            n_cuenta = input('Ingrese su numero de cuenta (o "s" para salir)> ')
+            if n_cuenta.lower().strip() == "s":
+                break
+            # try execpt
+            #print(f'''
+#++++ CUENTA ENCONTRADA +++++=
+#+ Nombre: {cuentas[n_cuenta]['NOMBRE']}
+#+ Documento: {cuentas[n_cuenta]['DOCUMENTO']}
+#+ Saldo: {cuentas[n_cuenta]['BILLETERA']}
+#++++++++++++++++++++++++++++=
+#''')
 # MAIN ALGORITM # ALGORITMO PRINCIPAL #
 
 while True: # Bucle controlado
