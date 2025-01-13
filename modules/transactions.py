@@ -23,15 +23,3 @@ def retirar_dinero(n_cuenta, monto, cuentas):
             print("Error: Clave incorrecta.")
     else:
         print("Error: La cuenta no existe.")
-
-
-
-def pagar_servicios2(id_cuenta, monto, servicio):
-    if id_cuenta in cuentas: # Verificacion de que la cuenta existe
-        if monto > 0: 
-            print(f"Se consignó {monto} en la cuenta {id_cuenta}")
-            print(f"Su saldo actual es: {saldo}")
-        else:
-            print("Dinero insuficiente para pagar el servicio")
-    else:
-        print("La cuenta no existe")
