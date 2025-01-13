@@ -15,27 +15,27 @@ def cls():
 cuentas = {} # Diccionario para guardar las cuentas
 
 # VARIABLES A USAR
-n_cuenta = 1
+n_cuenta = 1000 # Contador para asignar numeros unicos a las cuentas
 
 # 1. Funcion: Crear Una Cuenta Bancaria
 def crear_cuenta():
-    
-    global cuentas
-    global n_cuenta
+
+    global cuentas # Permiten modificar el diccionario declarado fuera de la funcion
+    global n_cuenta # Permite modificar la variable declarada fuera de la funcion
         
     documento = int(input("Ingrese numero de documento: "))
     nombre = input("Ingrese su nombre: ")
     clave = int(input("Ingrese su clave para la cuenta: "))
     
-    cuentas[n_cuenta] = {
+    cuentas[n_cuenta] = { # Crea nuevos datos en el diccionario cuentas
         'DOCUMENTO': documento,
         'NOMBRE': nombre,
         'CONTRASEÑA': clave,
-        'BILLETERA': 5000
+        'BILLETERA': 0
     }
     cls() # Limpia pantalla
     print(f"\n+ CUENTA CREADA CON EXITO +\n. + Numero de cuenta: {n_cuenta} +\n+ Nombre Guardado: {cuentas[n_cuenta]['NOMBRE']} +\n+ Documento: {cuentas[n_cuenta]['DOCUMENTO']} +\n")
-    n_cuenta += 1
+    n_cuenta += 1 # Incrementa el numero de cuenta
 
 def info_cuenta():
         while True:
