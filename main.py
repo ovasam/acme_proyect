@@ -38,7 +38,7 @@ def crear_cuenta():
     n_cuenta += 1
 
 def info_cuenta():
-    n_cuenta = input('Ingrese el numero de su cuenta')
+    n_cuenta = int(input('Ingrese el numero de su cuenta'))
     if n_cuenta not in cuentas:
         conf = input('Cuenta no encontrada, Desea buscar su cuenta?')
         if conf.lower().strip() == 's':
