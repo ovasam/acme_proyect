@@ -37,3 +37,33 @@ def no_opcion():
 +   OPCION NO IMPLEMENTADA. LO SIENTO   +
 +++++++++++++++++++++++++++++++++++++++++
 ''')
+    
+def monto_invalido():
+    print(""" 
++++++++++++++++++++++++++++++++++++++++++++++++++
++ Por favor indique un monto valido (mayor a 0) +
++++++++++++++++++++++++++++++++++++++++++++++++++        
+         """)
+    
+def saldo_insuficiente():
+    print("""
++++++++++++++++++++++++++++++++++++++++++++++++++
++ No dispones del saldo suficiente en tu cuenta +
++         Intenta con un monto menor            +
++++++++++++++++++++++++++++++++++++++++++++++++++        
+                      """)
+    
+def retiro_realizado(arreglo, n_cuenta):
+    print(f'''
++++++++++++++++++++++++++++++++
++      RETIRO COMPLETADO      +
++ Saldo > {arreglo[n_cuenta]['BILLETERA']}                +
+++++++++++++++++++++++++++++++++
+                      ''')
+    
+def cuenta_inexistente():
+    print("""
++++++++++++++++++++++++++++++++++
++  Error: La cuenta no existe.  +
++++++++++++++++++++++++++++++++++
+              """)
