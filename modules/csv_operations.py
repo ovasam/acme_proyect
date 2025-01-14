@@ -23,5 +23,3 @@ def mostrar_movimientos_csv(n_cuenta):
     #Parámetros:
     #n_cuenta (int): Número de la cuenta.
     archivo = (f"movimientos_cuenta_{n_cuenta}.csv")
-
-    
