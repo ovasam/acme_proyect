@@ -2,14 +2,14 @@
 import os
 from csv import writer
 from modules.error_messages import clave_incorrecta, monto_invalido, saldo_insuficiente, retiro_realizado, cuenta_inexistente
-
+from datetime import date, time, datetime
 # funcion limpiar pantalla
 def cls():
     os.system('cls' if os.name=='nt' else 'clear')
 
 # 3. Función: Consignar Dinero
 def consignar_dinero(n_cuenta, monto, cuentas):
-    
+    fecha = datetime.now()
     #Parámetros:
     #n_cuenta (int): Número de la cuenta donde se quiere consignar.
     #monto (float): Monto de dinero a consignar.
@@ -28,7 +28,7 @@ def consignar_dinero(n_cuenta, monto, cuentas):
                 #Guardar el movimiento en un archivo CSV
                 with open('movimientos_bancarios.csv', 'a', newline='') as file:
                     escritor = writer(file)
-                    escritor.writerow([n_cuenta, 'Consignación', monto, cuentas[n_cuenta]['BILLETERA']])
+                    escritor.writerow([n_cuenta, 'Consignacion', monto, cuentas[n_cuenta]['BILLETERA'], f'{fecha.strftime('%d - %m - %Y')}'])
                 cls()
                 print(f"""
 +++++++++++++++++++++++++++++++++
@@ -36,6 +36,9 @@ def consignar_dinero(n_cuenta, monto, cuentas):
 + Nuevo saldo: {cuentas[n_cuenta]['BILLETERA']}          +
 +++++++++++++++++++++++++++++++++
                 """)
+                movimiento = ['Consignacion', 'Dia/mes/year', f'Monto: {monto}', f'Saldo: {cuentas[n_cuenta]['BILLETERA']}']
+                cuentas[n_cuenta]['MOVIMIENTOS'].append(movimiento)
+                print(cuentas[n_cuenta])
         else:
             cls()
             clave_incorrecta()  # Mensaje de error 'Clave incorrecta'
