@@ -1,4 +1,7 @@
 # IMPORTACION DE MODULOS
+import os
+from modules.menus import menu_principal, sub_menu_servicios
+from modules.error_messages import adios, no_opcion
 import os # Importacion modulo sistema operativo para limpiar consola
 
 from modules.menus import menu_principal # Importamos el menu principal de nuestro modulo en: modules/menus.py
@@ -58,12 +61,13 @@ while True: # Bucle controlado
     match opcion: # Sistema de casos para ahorrar condiciones anidadas
         case 1: # Caso 1 Creacion de la cuenta
             crear_cuenta()
-        case 2:
-            info_cuenta()
-        case 4:
+        case 3:
                 cuenta = int(input('Ingrese el numero de cuenta >'))
                 monto = input('Ingrese el monto que quiere retirar')
                 t.retirar_dinero(cuenta, monto, cuentas)
+        case 4:
+            opcion = sub_menu_servicios()
+            t.pagar_servicio()
         case 7:
             adios()
             break

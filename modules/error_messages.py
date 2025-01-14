@@ -2,7 +2,7 @@
 def adios():
     print('''
 +++++++++++++++++++++++++++++
-++ Por favor Vuelva pronto ++
+++ Por favor vuelva pronto ++
 +++++++++++++++++++++++++++++
           ''')
 
