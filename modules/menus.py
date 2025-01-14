@@ -42,8 +42,8 @@ def sub_menu_servicios():
         opcion = input('Ingrese una opcion > ')
         if not opcion.isdigit():
             opcion_invalida()
-            return menu_principal()
+            return
         elif int(opcion) > 3 or int(opcion) <= 0:
             fuera_de_rango()
-            return menu_principal()
+            return 
         return int(opcion)

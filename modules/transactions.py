@@ -1,7 +1,7 @@
 # IMPORTACION DE MODULOS
 import os
 from csv import writer
-from modules.error_messages import clave_incorrecta, monto_invalido, saldo_insuficiente, retiro_realizado, cuenta_inexistente
+from modules.error_messages import clave_incorrecta, monto_invalido, saldo_insuficiente, retiro_realizado, cuenta_inexistente, consignacion_exitosa, monto_numerico
 from datetime import date, time, datetime
 # funcion limpiar pantalla
 def cls():
@@ -17,114 +17,78 @@ def consignar_dinero(n_cuenta, monto, cuentas):
 
     # Verificar si la cuenta existe en el diccionario de cuentas
     if n_cuenta in cuentas:
-        password = input("Ingrese su clave: ")
-        if int(password) == cuentas[n_cuenta]['CONTRASEÑA']:
             # Verificar que el monto sea válido
             if int(monto) <= 0:
                 cls()
                 monto_invalido()  # Mensaje de error 'Monto mayor a 0'
-            else:
-                cuentas[n_cuenta]['BILLETERA'] += int(monto)  # Sumar el monto al saldo
-                #Guardar el movimiento en un archivo CSV
-                with open('movimientos_bancarios.csv', 'a', newline='') as file:
-                    escritor = writer(file)
-                    escritor.writerow([n_cuenta, 'Consignacion', monto, cuentas[n_cuenta]['BILLETERA'], f'{fecha.strftime('%d - %m - %Y')}'])
-                cls()
-                print(f"""
-+++++++++++++++++++++++++++++++++
-+ Consignación exitosa.         +
-+ Nuevo saldo: {cuentas[n_cuenta]['BILLETERA']}          +
-+++++++++++++++++++++++++++++++++
-                """)
-                movimiento = ['Consignacion', 'Dia/mes/year', f'Monto: {monto}', f'Saldo: {cuentas[n_cuenta]['BILLETERA']}']
-                cuentas[n_cuenta]['MOVIMIENTOS'].append(movimiento)
-                print(cuentas[n_cuenta])
-        else:
+            
+            cuentas[n_cuenta]['BILLETERA'] += int(monto)  # Sumar el monto al saldo
+            #Guardar el movimiento en un archivo CSV
+            with open('movimientos_bancarios.csv', 'a', newline='') as file:
+                escritor = writer(file)
+                if file.tell() == 0:  # Si el archivo está vacío
+                    escritor.writerow(["  Numero de cuenta  ", "  Tipo de movimiento  ", "  Monto Movido  ", "  Saldo Actual  ", "  dia/mes/año :hora  "])  # Encabezados
+                escritor.writerow([f'{n_cuenta}', ' Consignacion ', f' {monto} ', f' {cuentas[n_cuenta]["BILLETERA"]} ', f' {fecha.strftime("%d/%m/%Y %H:%M")} '])
             cls()
-            clave_incorrecta()  # Mensaje de error 'Clave incorrecta'
+            consignacion_exitosa(cuentas, n_cuenta)
+            movimiento = ['Consignacion',  f'{fecha.strftime("%d/%m/%Y %H:%M")}', f'Monto: {monto}', f'{cuentas[n_cuenta]["BILLETERA"]}']
+            cuentas[n_cuenta]['MOVIMIENTOS'].append(movimiento)
+            print(cuentas[n_cuenta])
     else:
         cls()
         cuenta_inexistente()
 
 # 4. Función: Retirar Dinero
-def retirar_dinero(n_cuenta, monto, cuentas):
-    
-    #Parámetros:
-    #id_cuenta (int): Número de la cuenta desde la que se quiere retirar.
-    #monto (float): Monto de dinero a retirar.
-    #cuentas (dict): Diccionario con las cuentas y sus datos.
-
+def retirar_dinero(n_cuenta, cuentas): # (n_cuenta(str) = numero de cuenta), (monto(int) = monto para retirar), (cuentas(dict) = diccionario de cuentas)
+    fecha = datetime.now()
+    if not n_cuenta.isdigit():
+        monto_numerico()
+        return
+    n_cuenta = int(n_cuenta)
     #Verificar si la cuenta existe en el diccionario de cuentas
-    if n_cuenta in cuentas:
-        password = input("Ingrese su clave: ")
-        if int(password) == cuentas[n_cuenta]['CONTRASEÑA']:
+    try:
+        if n_cuenta in cuentas:
+            
+            password = int(input("Ingrese su clave: "))
+            if password != cuentas[n_cuenta]['CONTRASEÑA']:
+                cls()
+                clave_incorrecta()
+                n_cuenta = str(n_cuenta)
+                return
+
             saldo = cuentas[n_cuenta]['BILLETERA'] # 0
-            # Verificar si hay suficiente saldo para realizar el retiro
-            if int(monto) <= 0:
+            monto = int(input('Ingrese el monto que desea retirar >'))
+            
+            if saldo < monto:
                 cls()
-                monto_invalido() # Mensaje de error 'Monto mayor a 0'
-            elif int(monto) > saldo:
-                cls()
-                saldo_insuficiente() # Mensaje de error 'Monto insuficiente'
-            else:
-                cuentas[n_cuenta]['BILLETERA'] -= int(monto)  # Restar el monto del saldo
-                 # Guardar el movimiento directamente en el archivo CSV
-                with open('movimientos_bancarios.csv', 'a', newline='') as file:
-                    escritor = writer(file)
-                    escritor.writerow([n_cuenta, 'Retiro', monto, cuentas[n_cuenta]['BILLETERA']])
-                cls()
+                saldo_insuficiente() # Mensaje de error 'Monto mayor a 0'
+                n_cuenta = str(n_cuenta)
+                return
+            
+            elif monto <= 0:
+                print('Indique un saldo mayor a 0 para retirar')
+                # Guardar el movimiento directamente en el archivo CSV
+            
+            cuentas[n_cuenta]['BILLETERA'] -= int(monto)
+
+            with open('movimientos_bancarios.csv', 'a', newline='') as file:
+                escritor = writer(file)
+                if file.tell() == 0:  # Si la linea a la que tell apunta esta vacia
+                    escritor.writerow(["  Numero de cuenta  ", "  Tipo de movimiento  ", "  Monto Movido  ", "  Saldo Actual  ", "  dia/mes/año :hora  "])  # Encabezados
+                    escritor.writerow([f'{n_cuenta}', ' Consignacion ', f' {monto} ', f' {cuentas[n_cuenta]["BILLETERA"]} ', f' {fecha.strftime("%d/%m/%Y %H:%M")} '])
+                    cls()
                 retiro_realizado(cuentas, n_cuenta) # Mensaje de exito, 'Retiro Realizado.'
+                
         else:
             cls()
-            clave_incorrecta()
-    else:
-        cls()
-        print("""
+            print("""
 +++++++++++++++++++++++++++++++++
 +  Error: La cuenta no existe.  +
 +++++++++++++++++++++++++++++++++
-              """)
-        
-# 5. Función: pagar_servicio
-def pagar_servicio(n_cuenta, cuentas, opcion):
-    #Parámetros:
-    #n_cuenta (int): Número de la cuenta desde la cual se quiere pagar.
-    #cuentas (dict): Diccionario que contiene las cuentas y sus datos.
-
-    # Verificar si la cuenta existe
-    if n_cuenta in cuentas:
-        # Solicitar clave del usuario
-        password = int(input("Ingrese su clave: "))
-        if password == cuentas[n_cuenta]['CONTRASEÑA']:
-            saldo_actual = cuentas[n_cuenta]['BILLETERA']
-            
-            print(f'TU SALDO ACTUAL = {saldo_actual}')
-            
-            # Seleccionar servicio
-            match opcion:
-                case 1:
-                    print('Servicio de Luz')
-                case 2:
-                    print('Servicio de Gas')
-                case 3:
-                    print('Servicio de Agua')
-                    
-            if saldo_actual > 0:
-                # Escribir el pago en el archivo CSV
-                with open('movimientos_bancarios.csv', 'a', newline='') as file:
-                    escritor = writer(file)
-                    escritor.writerow([n_cuenta, f'Pago Servicio {opcion}', saldo_actual, 0])
-                cuentas[n_cuenta]['BILLETERA'] = 0
-                cls()
-                print(f"Servicio {opcion} pagado con éxito.")
-            else:
-                cls()
-                saldo_insuficiente()
-        else:
-            cls()
-            clave_incorrecta()  # Clave incorrecta
-    else:
-        cls()
-        cuenta_inexistente()  # Cuenta inexistente
+            """)
+    except BaseException as e:
+        print('Error: Usaste un dato incorrecto, Verifica tus datos (Recuerda, No puedes usar letras)', e)
+        n_cuenta = str(n_cuenta)
+        return retirar_dinero(n_cuenta, cuentas)
 
 

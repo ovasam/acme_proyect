@@ -3,11 +3,12 @@ import os
 # Menus
 from modules.menus import menu_principal, sub_menu_servicios
 # Mensajes de error y despedida
-from modules.error_messages import adios, no_opcion
+from modules.error_messages import adios, no_opcion, cuenta_encontrada
 
 # Modulo 01 <- Transacciones (retirar, consignar)
 import modules.transactions as t # Siempre al usar una trasaccion usamos t.(transaccion) <- si retiramos seria: t.retirar_dinero
-
+# Modulo 02 <- Servicios
+from modules.servicios import pagar_servicio_energia, pagar_servicio_gas, pagar_servicio_agua
 # Importamos modulo de archivos csv
 from csv import reader
 
@@ -37,13 +38,13 @@ def crear_cuenta():
             'DOCUMENTO': documento,
             'NOMBRE': nombre,
             'CONTRASEÑA': clave,
-            'BILLETERA': 120000,
+            'BILLETERA': 0,
             'MOVIMIENTOS': []  # Lista para guardar los movimientos
         }
         cls() # Limpia pantalla
         print(f"\n+ CUENTA CREADA CON EXITO +\n. + Numero de cuenta: {n_cuenta} +\n+ Nombre Guardado: {cuentas[n_cuenta]['NOMBRE']} +\n+ Documento: {cuentas[n_cuenta]['DOCUMENTO']} +\n")
         n_cuenta += 1 # Incrementa el numero de cuenta
-    except BaseException:
+    except BaseException: # Recibe error de base al tratar de operar una variable que no es un entero como entero
          print('Lo siento, Solo puedes usar numeros para tu contraseña')
          return crear_cuenta()
 
@@ -60,29 +61,11 @@ def info_cuenta():
 
         if int(n_cuenta) in cuentas:
             n_cuenta = int(n_cuenta)
-            print(f'''
-++++ CUENTA ENCONTRADA +++++=
-+ Nombre: {cuentas[n_cuenta]['NOMBRE']}
-+ Documento: {cuentas[n_cuenta]['DOCUMENTO']}
-+ Saldo: {cuentas[n_cuenta]['BILLETERA']}
-++++++++++++++++++++++++++++=
-''')
+            cuenta_encontrada(cuentas, n_cuenta)
             break
         if not n_cuenta in cuentas:
             print('Lo siento, tu cuenta no ha sido encontrada.')
-
-def leer_archivo():
-    global movimientos_archivo
-    # Abrir el archivo en modo lectura
-    # obtenemos cada fila del archivo y lo guardamos en lista de movimientos_archivo
-    # Cerramos el archivo
-    # movimientos_archivo contendrá los nuevos datos en el archivo
-    with open('movimientos_bancarios.csv', 'r') as archivo:
-        archivo_leido = reader(archivo)
-        for columna in archivo_leido:
-            movimientos_archivo.append(columna)
 # MAIN ALGORITM # ALGORITMO PRINCIPAL #
-leer_archivo()
 while True: # Bucle controlado
     opcion = menu_principal() # Inicializa el menu y guarda la opcion retornada en la variable #opcion#
 
@@ -94,14 +77,20 @@ while True: # Bucle controlado
             monto = int(input('Ingrese el monto que deseas consignar'))
             t.consignar_dinero(n_cuenta, monto, cuentas)
         case 3:
-                cuenta = int(input('Ingrese el numero de cuenta >'))
-                monto = input('Ingrese el monto que quiere retirar')
-                t.retirar_dinero(cuenta, monto, cuentas)
+                cuenta = input('Ingrese el numero de cuenta >')
+                t.retirar_dinero(cuenta, cuentas)
         case 4:
-            opcion = sub_menu_servicios()
-            n_cuenta = int(input('Ingrese numero de cuenta'))
-            t.pagar_servicio(n_cuenta, cuentas, opcion)  
-      
+            sub_opcion = sub_menu_servicios()
+            n_cuenta = input('Ingresa tu numero de cuenta')
+            match sub_opcion:
+                case 1:
+                    pagar_servicio_energia(cuentas, n_cuenta)
+                case 2:
+                    pagar_servicio_gas(cuentas, n_cuenta)
+                case 3:
+                    pagar_servicio_agua(cuentas, n_cuenta)
+                case _:
+                    print('Lo siento, servicio no encontrado')
         case 6:
             info_cuenta()
         case 7:
@@ -110,9 +99,3 @@ while True: # Bucle controlado
         case _:
             cls()
             no_opcion()
-
-
-# Modulos:
-# Modulo gestion_billetera: Lo usaremos para manejar los retiros y las consignaciones en cada cuenta.
-# La cuenta debe lucir asi: 
-# #{id_cuenta: {'nombre_cliente': 'nombre', 'documento_cliente': 'documento', 'clave_cliente': 'clave'}, 'dinero_en_banco': 'DINERO'}
