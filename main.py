@@ -26,34 +26,49 @@ def crear_cuenta():
     global cuentas # Permiten modificar el diccionario declarado fuera de la funcion
     global n_cuenta # Permite modificar la variable declarada fuera de la funcion
         
-    documento = int(input("Ingrese numero de documento: "))
-    nombre = input("Ingrese su nombre: ")
-    clave = int(input("Ingrese su clave para la cuenta: "))
+    try:
+        documento = int(input("Ingrese numero de documento: "))
+        nombre = input("Ingrese su nombre: ")
+        clave = int(input("Ingrese su clave para la cuenta: "))
     
-    cuentas[n_cuenta] = { # Crea nuevos datos en el diccionario cuentas
-        'DOCUMENTO': documento,
-        'NOMBRE': nombre,
-        'CONTRASEÑA': clave,
-        'BILLETERA': 120000
-        'MOVIMIENTOS': []  # Lista para guardar los movimientos
-    }
-    cls() # Limpia pantalla
-    print(f"\n+ CUENTA CREADA CON EXITO +\n. + Numero de cuenta: {n_cuenta} +\n+ Nombre Guardado: {cuentas[n_cuenta]['NOMBRE']} +\n+ Documento: {cuentas[n_cuenta]['DOCUMENTO']} +\n")
-    n_cuenta += 1 # Incrementa el numero de cuenta
+        cuentas[n_cuenta] = { # Crea nuevos datos en el diccionario cuentas
+            'DOCUMENTO': documento,
+            'NOMBRE': nombre,
+            'CONTRASEÑA': clave,
+            'BILLETERA': 120000,
+            'MOVIMIENTOS': []  # Lista para guardar los movimientos
+        }
+        cls() # Limpia pantalla
+        print(f"\n+ CUENTA CREADA CON EXITO +\n. + Numero de cuenta: {n_cuenta} +\n+ Nombre Guardado: {cuentas[n_cuenta]['NOMBRE']} +\n+ Documento: {cuentas[n_cuenta]['DOCUMENTO']} +\n")
+        n_cuenta += 1 # Incrementa el numero de cuenta
+    except BaseException:
+         print('Lo siento, Solo puedes usar numeros para tu contraseña')
+         return crear_cuenta()
 
 def info_cuenta():
-        while True:
-            n_cuenta = input('Ingrese su numero de cuenta (o "s" para salir)> ')
-            if n_cuenta.lower().strip() == "s":
-                break
-            # try execpt
-            #print(f'''
-#++++ CUENTA ENCONTRADA +++++=
-#+ Nombre: {cuentas[n_cuenta]['NOMBRE']}
-#+ Documento: {cuentas[n_cuenta]['DOCUMENTO']}
-#+ Saldo: {cuentas[n_cuenta]['BILLETERA']}
-#++++++++++++++++++++++++++++=
-#''')
+    global cuentas
+    while True:
+        n_cuenta = input('Ingrese su numero de cuenta (o "s" para salir)> ')
+        if n_cuenta.lower().strip() == "s":
+            print('Cancelando..Volviendo al menu principal')
+            break
+        elif not n_cuenta.isdigit():
+            print('Lo siento, la cuenta debe ser numerica')
+            return info_cuenta()
+
+        if int(n_cuenta) in cuentas:
+            n_cuenta = int(n_cuenta)
+            print(f'''
+++++ CUENTA ENCONTRADA +++++=
++ Nombre: {cuentas[n_cuenta]['NOMBRE']}
++ Documento: {cuentas[n_cuenta]['DOCUMENTO']}
++ Saldo: {cuentas[n_cuenta]['BILLETERA']}
+++++++++++++++++++++++++++++=
+''')
+            break
+        if not n_cuenta in cuentas:
+            print('Lo siento, tu cuenta no ha sido encontrada.')
+                
 # MAIN ALGORITM # ALGORITMO PRINCIPAL #
 
 while True: # Bucle controlado
@@ -74,6 +89,8 @@ while True: # Bucle controlado
             opcion = sub_menu_servicios()
             n_cuenta = int(input('Ingrese numero de cuenta'))
             t.pagar_servicio(n_cuenta, cuentas, opcion)  
+        case 6:
+            info_cuenta()
         case 7:
             adios()
             break
