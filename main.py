@@ -34,7 +34,7 @@ def crear_cuenta():
         'DOCUMENTO': documento,
         'NOMBRE': nombre,
         'CONTRASEÑA': clave,
-        'BILLETERA': 0
+        'BILLETERA': 120000
     }
     cls() # Limpia pantalla
     print(f"\n+ CUENTA CREADA CON EXITO +\n. + Numero de cuenta: {n_cuenta} +\n+ Nombre Guardado: {cuentas[n_cuenta]['NOMBRE']} +\n+ Documento: {cuentas[n_cuenta]['DOCUMENTO']} +\n")
@@ -61,13 +61,18 @@ while True: # Bucle controlado
     match opcion: # Sistema de casos para ahorrar condiciones anidadas
         case 1: # Caso 1 Creacion de la cuenta
             crear_cuenta()
+        case 2:
+            n_cuenta = int(input('Ingrese el numero de cuenta >'))
+            monto = int(input('Ingrese el monto que deseas consignar'))
+            t.consignar_dinero(n_cuenta, monto, cuentas)
         case 3:
                 cuenta = int(input('Ingrese el numero de cuenta >'))
                 monto = input('Ingrese el monto que quiere retirar')
                 t.retirar_dinero(cuenta, monto, cuentas)
         case 4:
             opcion = sub_menu_servicios()
-            t.pagar_servicio()
+            n_cuenta = int(input('Ingrese numero de cuenta'))
+            t.pagar_servicio(n_cuenta, cuentas, opcion)  
         case 7:
             adios()
             break

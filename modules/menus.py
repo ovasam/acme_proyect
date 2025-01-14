@@ -6,11 +6,11 @@ def menu_principal():
 +           A C M E  B A N K               +
 ++++++++++++++++++++++++++++++++++++++++++++          
 + 1. Crear Cuenta Nueva                    +
-+ 2. Informacion de Cuenta                 +
-+ 3. Consignar Dinero                      +
-+ 4. Retirar Dinero                        +
-+ 5. Pagar Servicios                       +
-+ 6. Mostrar Movimientos Bancarios         +
++ 2. Consignar Dinero                      +
++ 3. Retirar Dinero                        +
++ 4. Pagar Servicios                       +
++ 5. Mostrar Movimientos Bancarios         +
++ 6. Informacion de Cuenta                 +
 + 7. Salir                                 +
 ++++++++++++++++++++++++++++++++++++++++++++
 ''')

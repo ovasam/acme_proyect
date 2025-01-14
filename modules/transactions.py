@@ -15,26 +15,19 @@ def pagar_servicio(n_cuenta, cuentas, opcion):
     if n_cuenta in cuentas:
         # Solicitar clave del usuario
         password = int(input("Ingrese su clave: "))
-        if password == str(cuentas[n_cuenta]['CONTRASEÑA']):
+        if password == cuentas[n_cuenta]['CONTRASEÑA']:
             saldo_actual = cuentas[n_cuenta]['BILLETERA']
-
+            
+            print(f'TU SALDO ACTUAL = {saldo_actual}')
+            
             # Seleccionar servicio
-            servicio_seleccionado = input("Ingrese el nombre del servicio que desea pagar: ")
-            if servicio_seleccionado == '' :
-                monto = SERVICIOS[servicio_seleccionado]
-
-                # Validar si hay saldo suficiente
-                if monto > saldo_actual:
-                    cls()
-                    saldo_insuficiente()  # Saldo insuficiente
-                else:
-                    # Descontar el saldo
-                    cuentas[n_cuenta]['BILLETERA'] -= monto
-                    cls()
-                    pago_realizado(servicio_seleccionado, monto, cuentas, n_cuenta)  # Mensaje de éxito
-            else:
-                cls()
-                print("Error: Servicio no encontrado.")
+            match opcion:
+                case 1:
+                    print('Servicio de Luz')
+                case 2:
+                    print('Servicio de Gas')
+                case 3:
+                    print('Servicio de Agua')
         else:
             cls()
             clave_incorrecta()  # Clave incorrecta
@@ -76,3 +69,35 @@ def retirar_dinero(n_cuenta, monto, cuentas):
 +  Error: La cuenta no existe.  +
 +++++++++++++++++++++++++++++++++
               """)
+
+# 3. Función: Consignar Dinero
+def consignar_dinero(n_cuenta, monto, cuentas):
+    
+    #Parámetros:
+    #n_cuenta (int): Número de la cuenta donde se quiere consignar.
+    #monto (float): Monto de dinero a consignar.
+    #cuentas (dict): Diccionario con las cuentas y sus datos.
+
+    # Verificar si la cuenta existe en el diccionario de cuentas
+    if n_cuenta in cuentas:
+        password = input("Ingrese su clave: ")
+        if int(password) == cuentas[n_cuenta]['CONTRASEÑA']:
+            # Verificar que el monto sea válido
+            if int(monto) <= 0:
+                cls()
+                monto_invalido()  # Mensaje de error 'Monto mayor a 0'
+            else:
+                cuentas[n_cuenta]['BILLETERA'] += int(monto)  # Sumar el monto al saldo
+                cls()
+                print(f"""
++++++++++++++++++++++++++++++++++
++ Consignación exitosa.         +
++ Nuevo saldo: {cuentas[n_cuenta]['BILLETERA']}          +
++++++++++++++++++++++++++++++++++
+                """)
+        else:
+            cls()
+            clave_incorrecta()  # Mensaje de error 'Clave incorrecta'
+    else:
+        cls()
+        cuenta_inexistente()
