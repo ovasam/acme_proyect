@@ -1,14 +1,15 @@
 # IMPORTACION DE MODULOS
 import os
+# Menus
 from modules.menus import menu_principal, sub_menu_servicios
+# Mensajes de error y despedida
 from modules.error_messages import adios, no_opcion
-import os # Importacion modulo sistema operativo para limpiar consola
-
-from modules.menus import menu_principal # Importamos el menu principal de nuestro modulo en: modules/menus.py
-from modules.error_messages import adios, no_opcion, cuenta_inexistente # Importamos mensaje de despedida y de opcion en tramite de nuestro modulo en: modules/error_messages.py
 
 # Modulo 01 <- Transacciones (retirar, consignar)
 import modules.transactions as t # Siempre al usar una trasaccion usamos t.(transaccion) <- si retiramos seria: t.retirar_dinero
+
+# Importamos modulo de archivos csv
+from csv import reader
 
 # FUNCION LIMPIAR PANTALLA
 def cls():
@@ -17,6 +18,7 @@ def cls():
 # DICCIONARIOS A USAR
 cuentas = {} # Diccionario para guardar las cuentas
 
+movimientos_archivo = [['Numero de cuenta', 'Movimiento', 'Monto', 'Nuevo Saldo', 'Fecha']]
 # VARIABLES A USAR
 n_cuenta = 1000 # Contador para asignar numeros unicos a las cuentas
 
@@ -68,9 +70,19 @@ def info_cuenta():
             break
         if not n_cuenta in cuentas:
             print('Lo siento, tu cuenta no ha sido encontrada.')
-                
-# MAIN ALGORITM # ALGORITMO PRINCIPAL #
 
+def leer_archivo():
+    global movimientos_archivo
+    # Abrir el archivo en modo lectura
+    # obtenemos cada fila del archivo y lo guardamos en lista de movimientos_archivo
+    # Cerramos el archivo
+    # movimientos_archivo contendrá los nuevos datos en el archivo
+    with open('movimientos_bancarios.csv', 'r') as archivo:
+        archivo_leido = reader(archivo)
+        for columna in archivo_leido:
+            movimientos_archivo.append(columna)
+# MAIN ALGORITM # ALGORITMO PRINCIPAL #
+leer_archivo()
 while True: # Bucle controlado
     opcion = menu_principal() # Inicializa el menu y guarda la opcion retornada en la variable #opcion#
 
@@ -89,6 +101,7 @@ while True: # Bucle controlado
             opcion = sub_menu_servicios()
             n_cuenta = int(input('Ingrese numero de cuenta'))
             t.pagar_servicio(n_cuenta, cuentas, opcion)  
+      
         case 6:
             info_cuenta()
         case 7:
@@ -97,6 +110,7 @@ while True: # Bucle controlado
         case _:
             cls()
             no_opcion()
+
 
 # Modulos:
 # Modulo gestion_billetera: Lo usaremos para manejar los retiros y las consignaciones en cada cuenta.
