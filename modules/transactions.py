@@ -1,6 +1,6 @@
 # IMPORTACION DE MODULOS
 import os
-import csv
+from csv import writer
 from modules.error_messages import clave_incorrecta, monto_invalido, saldo_insuficiente, retiro_realizado, cuenta_inexistente
 
 # funcion limpiar pantalla
@@ -25,6 +25,10 @@ def consignar_dinero(n_cuenta, monto, cuentas):
                 monto_invalido()  # Mensaje de error 'Monto mayor a 0'
             else:
                 cuentas[n_cuenta]['BILLETERA'] += int(monto)  # Sumar el monto al saldo
+                #Guardar el movimiento en un archivo CSV
+                with open('movimientos_bancarios.csv', 'a', newline='') as file:
+                    escritor = writer(file)
+                    escritor.writerow([n_cuenta, 'Consignación', monto, cuentas[n_cuenta]['BILLETERA']])
                 cls()
                 print(f"""
 +++++++++++++++++++++++++++++++++
@@ -61,6 +65,10 @@ def retirar_dinero(n_cuenta, monto, cuentas):
                 saldo_insuficiente() # Mensaje de error 'Monto insuficiente'
             else:
                 cuentas[n_cuenta]['BILLETERA'] -= int(monto)  # Restar el monto del saldo
+                 # Guardar el movimiento directamente en el archivo CSV
+                with open('movimientos_bancarios.csv', 'a', newline='') as file:
+                    escritor = writer(file)
+                    escritor.writerow([n_cuenta, 'Retiro', monto, cuentas[n_cuenta]['BILLETERA']])
                 cls()
                 retiro_realizado(cuentas, n_cuenta) # Mensaje de exito, 'Retiro Realizado.'
         else:
@@ -97,6 +105,18 @@ def pagar_servicio(n_cuenta, cuentas, opcion):
                     print('Servicio de Gas')
                 case 3:
                     print('Servicio de Agua')
+                    
+            if saldo_actual > 0:
+                # Escribir el pago en el archivo CSV
+                with open('movimientos_bancarios.csv', 'a', newline='') as file:
+                    escritor = writer(file)
+                    escritor.writerow([n_cuenta, f'Pago Servicio {opcion}', saldo_actual, 0])
+                cuentas[n_cuenta]['BILLETERA'] = 0
+                cls()
+                print(f"Servicio {opcion} pagado con éxito.")
+            else:
+                cls()
+                saldo_insuficiente()
         else:
             cls()
             clave_incorrecta()  # Clave incorrecta
