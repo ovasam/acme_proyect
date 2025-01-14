@@ -16,13 +16,14 @@ def menu_principal():
 ''')
     while True:
         opcion = input('Ingrese una opcion > ')
-        if not opcion.isdigit():
-            opcion_invalida()
+        # Si la entrada no es un numero
+        if not opcion.isdigit(): # Verificar si la entrada contiene solo digitos
+            opcion_invalida() 
             return menu_principal()
         elif int(opcion) > 7 or int(opcion) <= 0:
             fuera_de_rango()
             return menu_principal()
-        return int(opcion)
+        return int(opcion) # Convierte la entrada a entero
     
 def sub_menu_servicios():
     print('''
