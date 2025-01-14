@@ -35,6 +35,7 @@ def crear_cuenta():
         'NOMBRE': nombre,
         'CONTRASEÑA': clave,
         'BILLETERA': 120000
+        'MOVIMIENTOS': []  # Lista para guardar los movimientos
     }
     cls() # Limpia pantalla
     print(f"\n+ CUENTA CREADA CON EXITO +\n. + Numero de cuenta: {n_cuenta} +\n+ Nombre Guardado: {cuentas[n_cuenta]['NOMBRE']} +\n+ Documento: {cuentas[n_cuenta]['DOCUMENTO']} +\n")
